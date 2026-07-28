@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://galyn-paul-wedding.vercel.app/sitemap.xml
-

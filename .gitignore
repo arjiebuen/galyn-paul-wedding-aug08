@@ -20,6 +20,10 @@
 # production
 /build
 
+# large media files
+/public/video/
+/public/music/
+
 # misc
 .DS_Store
 *.pem
