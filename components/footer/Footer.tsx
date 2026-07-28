@@ -32,7 +32,7 @@ export default function Footer() {
             <Globe size={20} />
           </Link>
           <Link
-            href="https://instagram.com"
+            href="https://www.instagram.com/galyn.sgallery?igsh=ZnYxdWI3YmM2Mm82"
             target="_blank"
             rel="noopener noreferrer"
             className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#C8A96A] transition-colors"
@@ -41,7 +41,7 @@ export default function Footer() {
             <Camera size={20} />
           </Link>
           <Link
-            href="https://messenger.com"
+            href="https://m.me/whoisgalyn"
             target="_blank"
             rel="noopener noreferrer"
             className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#C8A96A] transition-colors"
