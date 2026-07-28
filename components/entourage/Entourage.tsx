@@ -77,6 +77,7 @@ const entourage: EntourageGroup[] = [
       "Gadine Castro",
       "Aljur Cruz",
       "Ronel Bautista",
+      "Alexander Giron",
       "Jake Nebrida",
       "Lesmond Villanueva",
       "Christian Castro",
