@@ -32,7 +32,7 @@ export default function EnterOverlay({ onEnter }: EnterOverlayProps) {
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
           >
-            <source src="/video/weddingvidbackground.mp4" type="video/mp4" />
+            <source src="https://res.cloudinary.com/dalnsh7fy/video/upload/v1785244061/weddingvidbackground_i43jwb.mp4" type="video/mp4" />
           </video>
 
           {/* Dark overlay for text readability */}
