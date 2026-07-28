@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -27,6 +27,13 @@ function scrollToSection(href: string) {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleClick = (href: string) => {
     setIsOpen(false);
@@ -73,13 +80,15 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.7 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-5 right-5 z-50 md:hidden
+        className={`fixed top-5 right-5 z-50 md:hidden
         w-12 h-12 rounded-full
-        border border-white/20
-        bg-white/15
-        backdrop-blur-xl
-        flex items-center justify-center
-        text-white"
+        border backdrop-blur-xl
+        flex items-center justify-center transition-all duration-300
+        ${
+          scrolled
+            ? "bg-white border-gray-200 text-[#3A312C] shadow-md"
+            : "bg-white/15 border-white/20 text-white"
+        }`}
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
         {isOpen ? <X size={22} /> : <Menu size={22} />}
