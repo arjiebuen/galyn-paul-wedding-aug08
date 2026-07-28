@@ -14,7 +14,7 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio("/music/I%20Prayed%20for%20You.m4a");
+    const audio = new Audio("https://res.cloudinary.com/dalnsh7fy/video/upload/v1785244862/I_Prayed_for_You_osuzbo.m4a");
     audio.loop = true;
     audio.volume = 0.3;
     audioRef.current = audio;
@@ -26,8 +26,10 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   }, []);
 
   useEffect(() => {
-    if (autoPlay && audioRef.current) {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    if (!autoPlay) return;
+    const audio = audioRef.current;
+    if (audio) {
+      audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   }, [autoPlay]);
 
