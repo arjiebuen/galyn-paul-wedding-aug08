@@ -51,18 +51,23 @@ export default function Venue() {
             </div>
           </motion.div>
 
-          {/* Map Placeholder */}
+          {/* Map Embed */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="rounded-3xl overflow-hidden shadow-xl aspect-[4/3] bg-[#e8e0d8] flex items-center justify-center"
+            className="rounded-3xl overflow-hidden shadow-xl aspect-[4/3]"
           >
-            <div className="text-center text-gray-400">
-              <MapPin size={48} className="mx-auto text-[#C8A96A]" />
-              <p className="mt-4 text-lg">Google Maps Embed</p>
-              <p className="text-sm">Lla Madoma Agtarap Beachfront</p>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.889911936111!2d120.33959567515015!3d16.73234388404744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391f39a8b14cb73%3A0x3f561ed093398afd!2sLLa%20Madoma%20Agtarap%20Beachfront%20Cottage!5e0!3m2!1sen!2sph!4v1785248595221!5m2!1sen!2sph"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="La Madomma Agtarap Beachfront"
+            />
           </motion.div>
         </div>
       </div>
