@@ -48,7 +48,7 @@ const entourage: EntourageGroup[] = [
       "Mr. Leo Mauro & Mrs. Rovie Mauro",
       "Mr. George Bautista & Mrs. Lenie Bautista",
       "Mr. Roger Bautista & Mrs. Josana Bautista",
-      "Mr. Rico Nebrida & Mrs. Fransisca Nebrida",
+      "Mr. Rico Nebrida & Mrs. Francisca Nebrida",
       "Ms. Cecil Delarmente",
       "Ms. Edna Galang",
       "Mr. Pontestante Padua",
