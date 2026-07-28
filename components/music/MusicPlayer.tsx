@@ -4,11 +4,14 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Music, Play, Pause } from "lucide-react";
 
-export default function MusicPlayer() {
+interface MusicPlayerProps {
+  autoPlay?: boolean;
+}
+
+export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const startedRef = useRef(false);
 
   useEffect(() => {
     const audio = new Audio("/music/I%20Prayed%20for%20You.m4a");
@@ -16,48 +19,17 @@ export default function MusicPlayer() {
     audio.volume = 0.3;
     audioRef.current = audio;
 
-    const play = () => {
-      if (startedRef.current) return;
-      audio.play().then(() => {
-        startedRef.current = true;
-        setIsPlaying(true);
-      }).catch(() => {});
-    };
-
-    // Try immediate autoplay
-    audio.play().then(() => {
-      startedRef.current = true;
-      setIsPlaying(true);
-    }).catch(() => {
-      // Use IntersectionObserver on hero section as scroll trigger
-      const hero = document.querySelector("section");
-      if (hero) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            if (!entries[0].isIntersecting) {
-              play();
-              observer.disconnect();
-            }
-          },
-          { threshold: 0 }
-        );
-        observer.observe(hero);
-      }
-
-      // Also fallback to any interaction
-      const events = ["scroll", "click", "touchstart", "keydown", "mousemove", "wheel"] as const;
-      const handler = () => {
-        play();
-        events.forEach((e) => window.removeEventListener(e, handler));
-      };
-      events.forEach((e) => window.addEventListener(e, handler, { passive: true }));
-    });
-
     return () => {
       audio.pause();
       audioRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (autoPlay && audioRef.current) {
+      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    }
+  }, [autoPlay]);
 
   const handleToggle = () => {
     const audio = audioRef.current;
@@ -66,10 +38,7 @@ export default function MusicPlayer() {
       audio.pause();
       setIsPlaying(false);
     } else {
-      audio.play().then(() => {
-        startedRef.current = true;
-        setIsPlaying(true);
-      }).catch(() => {});
+      audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   };
 

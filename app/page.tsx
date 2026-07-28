@@ -1,4 +1,4 @@
-import Loader from "@/components/common/Loader";
+import ClientWrapper from "@/components/common/ClientWrapper";
 import Navbar from "@/components/common/Navbar";
 import Hero from "@/components/hero/Hero";
 import WeddingCountdown from "@/components/countdown/Countdown";
@@ -14,12 +14,11 @@ import RSVP from "@/components/rsvp/RSVP";
 import FAQ from "@/components/faq/FAQ";
 import Footer from "@/components/footer/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
-import MusicPlayer from "@/components/music/MusicPlayer";
 
 export default function Home() {
   return (
     <>
-      <Loader />
+      <ClientWrapper />
       <Navbar />
       <main>
         <Hero />
@@ -37,7 +36,6 @@ export default function Home() {
       </main>
       <Footer />
       <ScrollToTop />
-      <MusicPlayer />
     </>
   );
 }
