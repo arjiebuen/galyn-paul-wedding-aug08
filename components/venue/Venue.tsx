@@ -34,6 +34,13 @@ export default function Venue() {
             className="space-y-6"
           >
             <div className="rounded-3xl bg-white p-8 shadow-xl">
+              <div className="relative w-full h-48 mb-6 overflow-hidden rounded-xl">
+                <img
+                  src="https://res.cloudinary.com/dalnsh7fy/image/upload/v1785282607/LLA_Madoma_Agtarap_losvug.jpg"
+                  alt="Lla Madoma Agtarap Beachfront"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <MapPin className="text-[#C8A96A]" size={32} />
               <h3 className="text-2xl font-semibold mt-4">Lla Madoma Agtarap Beachfront</h3>
               <p className="text-gray-600 mt-3 leading-relaxed">
