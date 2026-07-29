@@ -36,50 +36,34 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     }
   }, [autoPlay]);
 
-  // Pause when user leaves tab/window, resume when they come back (all devices)
+  // Pause music when user leaves the page/tab/window on ALL devices
+  // Does NOT auto-resume — music stays paused until user manually clicks play
   useEffect(() => {
-    if (!autoPlay) return;
-
     const handleVisibilityChange = () => {
+      if (!autoPlay) return;
       const audio = audioRef.current;
-      if (!audio) return;
+      if (!audio || audio.paused) return;
 
       if (document.hidden) {
         setIsPlaying(false);
         audio.pause();
-      } else {
-        audio.play().then(() => setIsPlaying(true)).catch(() => {});
       }
+    };
+
+    const handleBlur = () => {
+      if (!autoPlay) return;
+      const audio = audioRef.current;
+      if (!audio || audio.paused) return;
+      setIsPlaying(false);
+      audio.pause();
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [autoPlay]);
-
-  // Handle page blur/focus as well (catches more scenarios)
-  useEffect(() => {
-    if (!autoPlay) return;
-
-    const handleBlur = () => {
-      const audio = audioRef.current;
-      if (audio) {
-        setIsPlaying(false);
-        audio.pause();
-      }
-    };
-
-    const handleFocus = () => {
-      const audio = audioRef.current;
-      if (audio) {
-        audio.play().then(() => setIsPlaying(true)).catch(() => {});
-      }
-    };
-
     window.addEventListener("blur", handleBlur);
-    window.addEventListener("focus", handleFocus);
+
     return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("blur", handleBlur);
-      window.removeEventListener("focus", handleFocus);
     };
   }, [autoPlay]);
 
