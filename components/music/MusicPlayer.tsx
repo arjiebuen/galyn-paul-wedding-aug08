@@ -10,16 +10,10 @@ interface MusicPlayerProps {
 
 const AUDIO_URL = "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a";
 
-function getIsMobile(): boolean {
-  if (typeof window === "undefined") return false;
-  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
-}
-
 export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isMobile = getIsMobile();
 
   // Create audio immediately on mount, preload eagerly
   useEffect(() => {
@@ -42,10 +36,9 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     }
   }, [autoPlay]);
 
-  // On mobile: pause when user leaves tab/window, resume when they come back
-  // On desktop: do nothing — music keeps playing until user manually stops it
+  // Pause when user leaves tab/window, resume when they come back (all devices)
   useEffect(() => {
-    if (!autoPlay || !isMobile) return;
+    if (!autoPlay) return;
 
     const handleVisibilityChange = () => {
       const audio = audioRef.current;
@@ -61,11 +54,11 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [autoPlay, isMobile]);
+  }, [autoPlay]);
 
-  // Handle page blur/focus as well (catches more mobile scenarios)
+  // Handle page blur/focus as well (catches more scenarios)
   useEffect(() => {
-    if (!autoPlay || !isMobile) return;
+    if (!autoPlay) return;
 
     const handleBlur = () => {
       const audio = audioRef.current;
@@ -88,7 +81,7 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
       window.removeEventListener("blur", handleBlur);
       window.removeEventListener("focus", handleFocus);
     };
-  }, [autoPlay, isMobile]);
+  }, [autoPlay]);
 
   const handleToggle = useCallback(() => {
     const audio = audioRef.current;
