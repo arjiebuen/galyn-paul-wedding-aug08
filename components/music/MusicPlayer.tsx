@@ -10,18 +10,16 @@ interface MusicPlayerProps {
 
 const AUDIO_URL = "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a";
 
+function getIsMobile(): boolean {
+  if (typeof window === "undefined") return false;
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+}
+
 export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isMobileRef = useRef<boolean>(false);
-
-  // Detect mobile immediately — not inside a useEffect — so it's available
-  // before any other effect that checks isMobileRef runs.
-  if (typeof window !== "undefined") {
-    isMobileRef.current =
-      /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
-  }
+  const isMobile = getIsMobile();
 
   // Create audio immediately on mount, preload eagerly
   useEffect(() => {
@@ -47,29 +45,27 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   // On mobile: pause when user leaves tab/window, resume when they come back
   // On desktop: do nothing — music keeps playing until user manually stops it
   useEffect(() => {
-    if (!autoPlay || !isMobileRef.current) return;
+    if (!autoPlay || !isMobile) return;
 
     const handleVisibilityChange = () => {
       const audio = audioRef.current;
       if (!audio) return;
 
       if (document.hidden) {
-        // User left the tab — pause on mobile
         setIsPlaying(false);
         audio.pause();
       } else {
-        // User came back — resume if was playing
         audio.play().then(() => setIsPlaying(true)).catch(() => {});
       }
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [autoPlay]);
+  }, [autoPlay, isMobile]);
 
   // Handle page blur/focus as well (catches more mobile scenarios)
   useEffect(() => {
-    if (!autoPlay || !isMobileRef.current) return;
+    if (!autoPlay || !isMobile) return;
 
     const handleBlur = () => {
       const audio = audioRef.current;
@@ -92,7 +88,7 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
       window.removeEventListener("blur", handleBlur);
       window.removeEventListener("focus", handleFocus);
     };
-  }, [autoPlay]);
+  }, [autoPlay, isMobile]);
 
   const handleToggle = useCallback(() => {
     const audio = audioRef.current;
