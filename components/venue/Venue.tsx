@@ -12,7 +12,7 @@ export default function Venue() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-heading text-6xl text-center mb-4"
+          className="font-heading text-4xl sm:text-6xl text-center mb-4"
         >
           The Venue
         </motion.h2>
@@ -34,8 +34,8 @@ export default function Venue() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="rounded-3xl bg-white p-8 shadow-xl">
-              <div className="relative w-full h-48 mb-6 overflow-hidden rounded-xl">
+            <div className="rounded-3xl bg-white p-5 sm:p-8 shadow-xl">
+              <div className="relative w-full h-40 sm:h-48 mb-6 overflow-hidden rounded-xl">
                 <Image
                   src="https://res.cloudinary.com/dalnsh7fy/image/upload/v1785282607/LLA_Madoma_Agtarap_losvug.jpg"
                   alt="Lla Madoma Agtarap Beachfront"

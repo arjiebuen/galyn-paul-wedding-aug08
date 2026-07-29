@@ -70,7 +70,7 @@ export default function WeddingCountdown() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-          className="mb-14 text-6xl font-bold"
+          className="mb-10 sm:mb-14 text-4xl sm:text-6xl font-bold"
         >
           Counting Down
         </motion.h2>
@@ -85,10 +85,10 @@ export default function WeddingCountdown() {
             <motion.div
               key={label}
               variants={itemVariants}
-              className="rounded-3xl bg-white p-8 shadow-xl"
+              className="rounded-3xl bg-white p-4 sm:p-8 shadow-xl"
             >
-              <h3 className="text-5xl font-bold">{value}</h3>
-              <p className="mt-3 uppercase tracking-widest text-gray-500">
+              <h3 className="text-3xl sm:text-5xl font-bold">{value}</h3>
+              <p className="mt-1 sm:mt-3 uppercase tracking-widest text-xs sm:text-base text-gray-500">
                 {label}
               </p>
             </motion.div>

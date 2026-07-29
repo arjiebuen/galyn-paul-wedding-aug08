@@ -6,11 +6,11 @@ export default function Footer() {
     <footer className="py-20 bg-[#3A312C] text-white">
       <div className="container mx-auto px-6 text-center">
         {/* Large Typography */}
-        <h2 className="font-heading text-7xl md:text-9xl leading-tight">
+        <h2 className="font-heading text-5xl sm:text-7xl md:text-9xl leading-tight">
           PAUL
         </h2>
-        <p className="text-3xl font-heading my-4">&amp;</p>
-        <h2 className="font-heading text-7xl md:text-9xl leading-tight">
+        <p className="text-2xl sm:text-3xl font-heading my-3 sm:my-4">&amp;</p>
+        <h2 className="font-heading text-5xl sm:text-7xl md:text-9xl leading-tight">
           GALYN
         </h2>
 

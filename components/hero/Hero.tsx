@@ -65,17 +65,17 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
             Together with our families
           </p>
 
-          <h1 className="font-heading text-7xl md:text-9xl mt-6">Paul</h1>
-          <p className="text-3xl italic my-3">&</p>
-          <h1 className="font-heading text-7xl md:text-9xl">Galyn</h1>
+          <h1 className="font-heading text-5xl sm:text-6xl md:text-9xl mt-6">Paul</h1>
+          <p className="text-2xl sm:text-3xl italic my-2 sm:my-3">&</p>
+          <h1 className="font-heading text-5xl sm:text-6xl md:text-9xl">Galyn</h1>
 
-          <p className="mt-10 text-lg">August 30, 2026</p>
+          <p className="mt-6 sm:mt-10 text-base sm:text-lg">August 30, 2026</p>
 
           <motion.button
             onClick={handleOpen}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="mt-10 rounded-full bg-white px-8 py-4 text-black font-medium transition cursor-pointer flex items-center gap-2 mx-auto"
+            className="mt-6 sm:mt-10 rounded-full bg-white px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base text-black font-medium transition cursor-pointer flex items-center gap-2 mx-auto"
           >
             <span>💌</span>
             Open Invitation
@@ -97,7 +97,7 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
             className="fixed inset-0 z-[998] flex items-center justify-center bg-[#F7F4EF]"
           >
             {/* Envelope body */}
-            <div className="relative w-80 h-56">
+            <div className="relative w-64 sm:w-80 h-44 sm:h-56">
               {/* Envelope back */}
               <div className="absolute inset-0 bg-[#e8ddd4] rounded-2xl shadow-2xl" />
 
@@ -126,7 +126,7 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
                 transition={{ duration: 0.7, delay: 0.9, ease: "easeOut" }}
                 className="absolute inset-x-4 bottom-4 bg-white rounded-xl shadow-lg p-4 text-center z-20"
               >
-                <p className="font-heading text-2xl text-[#3A312C]">Paul & Galyn</p>
+                <p className="font-heading text-lg sm:text-2xl text-[#3A312C]">Paul & Galyn</p>
                 <p className="text-xs text-gray-400 tracking-widest uppercase mt-1">August 30, 2026</p>
               </motion.div>
 
@@ -207,7 +207,7 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               >
                 {/* Inner white card */}
-                <div className="bg-white rounded-2xl p-10 md:p-14 text-center relative">
+                <div className="bg-white rounded-2xl p-6 sm:p-10 md:p-14 text-center relative">
                   {/* Decorative top border */}
                   <motion.div
                     initial={{ scaleX: 0 }}
@@ -231,7 +231,7 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.8 }}
-                    className="font-heading text-6xl md:text-7xl text-[#3A312C]"
+                    className="font-heading text-4xl sm:text-6xl md:text-7xl text-[#3A312C]"
                   >
                     Paul
                   </motion.h2>
@@ -240,18 +240,18 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, delay: 1.0 }}
-                    className="my-4 flex items-center justify-center gap-4"
+                    className="my-2 sm:my-4 flex items-center justify-center gap-3 sm:gap-4"
                   >
-                    <span className="h-px w-12 bg-[#D8C3B5]" />
-                    <span className="text-2xl text-[#C8A96A] font-heading italic">&amp;</span>
-                    <span className="h-px w-12 bg-[#D8C3B5]" />
+                    <span className="h-px w-8 sm:w-12 bg-[#D8C3B5]" />
+                    <span className="text-xl sm:text-2xl text-[#C8A96A] font-heading italic">&amp;</span>
+                    <span className="h-px w-8 sm:w-12 bg-[#D8C3B5]" />
                   </motion.div>
 
                   <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 1.1 }}
-                    className="font-heading text-6xl md:text-7xl text-[#3A312C]"
+                    className="font-heading text-4xl sm:text-6xl md:text-7xl text-[#3A312C]"
                   >
                     Galyn
                   </motion.h2>
