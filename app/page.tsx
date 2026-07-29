@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import ClientWrapper from "@/components/common/ClientWrapper";
 import Navbar from "@/components/common/Navbar";
 import Hero from "@/components/hero/Hero";
@@ -16,13 +19,15 @@ import Footer from "@/components/footer/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
 
 export default function Home() {
+  const [invitationOpened, setInvitationOpened] = useState(false);
+
   return (
     <>
       <ClientWrapper />
       <Navbar />
       <main>
-        <Hero />
-        <WeddingCountdown />
+        <Hero onInvitationOpened={() => setInvitationOpened(true)} />
+        {invitationOpened && <WeddingCountdown />}
         <Invitation />
         <OurStory />
         <Timeline />

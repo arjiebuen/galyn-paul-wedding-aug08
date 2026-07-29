@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Confetti from "@/components/common/Confetti";
 
-export default function Hero() {
+interface HeroProps {
+  onInvitationOpened?: () => void;
+}
+
+export default function Hero({ onInvitationOpened }: HeroProps) {
   const [opening, setOpening] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [cardRevealed, setCardRevealed] = useState(false);
@@ -24,6 +28,7 @@ export default function Hero() {
     setTimeout(() => {
       setDone(true);
       setOpening(false);
+      onInvitationOpened?.();
       const el = document.getElementById("invitation");
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 4200);
