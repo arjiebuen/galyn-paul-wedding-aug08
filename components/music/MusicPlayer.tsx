@@ -20,7 +20,14 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isMobile = useRef(false);
+  const isMobileRef = useRef<boolean>(false);
+
+  // Detect mobile immediately — not inside a useEffect — so it's available
+  // before any other effect that checks isMobileRef runs.
+  if (typeof window !== "undefined") {
+    isMobileRef.current =
+      /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+  }
 
   // Create audio immediately on mount, preload eagerly
   useEffect(() => {
@@ -31,11 +38,6 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
       audio.preload = "auto";
       audioRef.current = audio;
     }
-  }, []);
-
-  // Detect mobile on mount
-  useEffect(() => {
-    isMobile.current = isMobileDevice();
   }, []);
 
   // Auto-play as soon as component gets green light
@@ -51,7 +53,7 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   // On mobile: pause when user leaves tab/window, resume when they come back
   // On desktop: do nothing — music keeps playing until user manually stops it
   useEffect(() => {
-    if (!autoPlay || !isMobile.current) return;
+    if (!autoPlay || !isMobileRef.current) return;
 
     const handleVisibilityChange = () => {
       const audio = audioRef.current;
@@ -59,14 +61,11 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
 
       if (document.hidden) {
         // User left the tab — pause on mobile
-        if (!audio.paused) {
-          audio.pause();
-        }
+        setIsPlaying(false);
+        audio.pause();
       } else {
-        // User came back — resume
-        if (audio.paused) {
-          audio.play().then(() => setIsPlaying(true)).catch(() => {});
-        }
+        // User came back — resume if was playing
+        audio.play().then(() => setIsPlaying(true)).catch(() => {});
       }
     };
 
@@ -76,18 +75,19 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
 
   // Handle page blur/focus as well (catches more mobile scenarios)
   useEffect(() => {
-    if (!autoPlay || !isMobile.current) return;
+    if (!autoPlay || !isMobileRef.current) return;
 
     const handleBlur = () => {
       const audio = audioRef.current;
-      if (audio && !audio.paused) {
+      if (audio) {
+        setIsPlaying(false);
         audio.pause();
       }
     };
 
     const handleFocus = () => {
       const audio = audioRef.current;
-      if (audio && audio.paused) {
+      if (audio) {
         audio.play().then(() => setIsPlaying(true)).catch(() => {});
       }
     };

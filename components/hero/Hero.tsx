@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import Confetti from "@/components/common/Confetti";
 
 interface HeroProps {
   onInvitationOpened?: () => void;
@@ -11,25 +10,23 @@ interface HeroProps {
 
 export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps) {
   const [opening, setOpening] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [cardRevealed, setCardRevealed] = useState(false);
   const [cardExiting, setCardExiting] = useState(false);
 
   const handleOpen = () => {
     setOpening(true);
 
-    // Card reveals faster (1s instead of 1.7s)
+    // Envelope animation: 0-1s, then card reveals at 1s
     const t1 = setTimeout(() => {
       setCardRevealed(true);
-      setShowConfetti(true);
     }, 1000);
 
-    // Card visible for ~2.5s, then fades out (3.5s instead of 6.5s)
+    // Card visible for ~7s, then fades out (8s total)
     const t2 = setTimeout(() => {
       setCardExiting(true);
-    }, 3500);
+    }, 8000);
 
-    // Overlay gone at ~4.8s instead of 8s - countdown fades in
+    // Overlay fully gone at 10s
     const t3 = setTimeout(() => {
       setOpening(false);
       setCardExiting(false);
@@ -37,16 +34,12 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
       onCountdownReady?.();
       const el = document.getElementById("invitation");
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 4800);
-
-    // Stop confetti earlier
-    const t4 = setTimeout(() => setShowConfetti(false), 2500);
+    }, 10000);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
-      clearTimeout(t4);
     };
   };
 
@@ -88,9 +81,6 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
           </motion.button>
         </motion.div>
       </section>
-
-      {/* Confetti */}
-      {showConfetti && <Confetti count={50} />}
 
       {/* Envelope & Card Opening Overlay */}
       <AnimatePresence>
