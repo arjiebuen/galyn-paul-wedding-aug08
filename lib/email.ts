@@ -15,7 +15,7 @@ interface RSVPNotification {
 }
 
 export async function sendRSVPNotification(data: RSVPNotification) {
-  const { fullName, email, attending, guests, message } = data;
+  const { fullName, attending, guests, message } = data;
 
   if (!resend) {
     console.error("Resend email not sent: RESEND_API_KEY is not configured.");
@@ -26,10 +26,6 @@ export async function sendRSVPNotification(data: RSVPNotification) {
     console.error("Resend email not sent: NOTIFICATION_EMAIL is not configured.");
     return { success: false, error: new Error("NOTIFICATION_EMAIL is not configured") };
   }
-
-  const subject = attending
-    ? `✅ Your RSVP is confirmed — Paul & Galyn Wedding`
-    : `Your RSVP has been received — Paul & Galyn Wedding`;
 
   const html = `
     <!DOCTYPE html>

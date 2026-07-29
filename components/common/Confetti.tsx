@@ -8,20 +8,29 @@ interface ConfettiProps {
   colors?: string[];
 }
 
+// Pure pseudo-random number generator (deterministic)
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed * 9301 + 49297) * 49297;
+  return x - Math.floor(x);
+}
+
 export default function Confetti({ count = 40, colors = ["#C8A96A", "#D4AF37", "#FFD700", "#F5E6CC", "#E8C771"] }: ConfettiProps) {
   const particles = useMemo(
     () =>
-      Array.from({ length: count }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: -10 - Math.random() * 20,
-        size: Math.random() * 8 + 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        rotation: Math.random() * 360,
-        duration: Math.random() * 2 + 1.5,
-        delay: Math.random() * 0.5,
-        shape: Math.random() > 0.5 ? "circle" : "rect",
-      })),
+      Array.from({ length: count }, (_, i) => {
+        const s = i * 137 + 1;
+        return {
+          id: i,
+          x: seededRandom(s) * 100,
+          y: -10 - seededRandom(s + 1) * 20,
+          size: seededRandom(s + 2) * 8 + 4,
+          color: colors[Math.floor(seededRandom(s + 3) * colors.length)],
+          rotation: seededRandom(s + 4) * 360,
+          duration: seededRandom(s + 5) * 2 + 1.5,
+          delay: seededRandom(s + 6) * 0.5,
+          shape: seededRandom(s + 7) > 0.5 ? "circle" : "rect",
+        };
+      }),
     [count, colors]
   );
 

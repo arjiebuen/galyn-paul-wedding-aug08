@@ -12,7 +12,6 @@ export default function Hero({ onInvitationOpened }: HeroProps) {
   const [opening, setOpening] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [cardRevealed, setCardRevealed] = useState(false);
-  const [done, setDone] = useState(false);
 
   const handleOpen = () => {
     setOpening(true);
@@ -26,7 +25,6 @@ export default function Hero({ onInvitationOpened }: HeroProps) {
 
     // Step 3: After card is shown, fade out and scroll to invitation
     setTimeout(() => {
-      setDone(true);
       setOpening(false);
       onInvitationOpened?.();
       const el = document.getElementById("invitation");

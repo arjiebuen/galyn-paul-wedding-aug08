@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { MapPin, Navigation } from "lucide-react";
 
@@ -35,10 +36,11 @@ export default function Venue() {
           >
             <div className="rounded-3xl bg-white p-8 shadow-xl">
               <div className="relative w-full h-48 mb-6 overflow-hidden rounded-xl">
-                <img
+                <Image
                   src="https://res.cloudinary.com/dalnsh7fy/image/upload/v1785282607/LLA_Madoma_Agtarap_losvug.jpg"
                   alt="Lla Madoma Agtarap Beachfront"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <MapPin className="text-[#C8A96A]" size={32} />
