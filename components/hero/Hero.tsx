@@ -18,30 +18,36 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
   const handleOpen = () => {
     setOpening(true);
 
-    // Step 1: Envelope opens, letter rises
-    // Step 2: After letter rises, expand into full invitation card
-    setTimeout(() => {
+    // Card reveals faster (1s instead of 1.7s)
+    const t1 = setTimeout(() => {
       setCardRevealed(true);
       setShowConfetti(true);
-    }, 1700);
+    }, 1000);
 
-    // Step 3: Card stays visible for ~4.8s, then begins smooth fade-out
-    setTimeout(() => {
+    // Card visible for ~2.5s, then fades out (3.5s instead of 6.5s)
+    const t2 = setTimeout(() => {
       setCardExiting(true);
-    }, 6500);
+    }, 3500);
 
-    // Step 4: After smooth fade-out completes, hide overlay and fire callbacks
-    setTimeout(() => {
+    // Overlay gone at ~4.8s instead of 8s - countdown fades in
+    const t3 = setTimeout(() => {
       setOpening(false);
       setCardExiting(false);
       onInvitationOpened?.();
       onCountdownReady?.();
       const el = document.getElementById("invitation");
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 8000);
+    }, 4800);
 
-    // Stop confetti after a bit
-    setTimeout(() => setShowConfetti(false), 3500);
+    // Stop confetti earlier
+    const t4 = setTimeout(() => setShowConfetti(false), 2500);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
   };
 
   return (
@@ -169,12 +175,12 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{
               opacity: cardExiting ? 0 : 1,
-              scale: cardExiting ? 0.9 : 1,
-              filter: cardExiting ? "blur(4px)" : "blur(0px)",
+              scale: cardExiting ? 0.92 : 1,
+              filter: cardExiting ? "blur(3px)" : "blur(0px)",
             }}
             exit={{ opacity: 0, scale: 0.85, filter: "blur(6px)" }}
             transition={{
-              duration: cardExiting ? 1.5 : 0.6,
+              duration: cardExiting ? 1.3 : 0.6,
               ease: "easeInOut",
             }}
             className="fixed inset-0 z-[998] flex items-center justify-center bg-[#F7F4EF]/95"
