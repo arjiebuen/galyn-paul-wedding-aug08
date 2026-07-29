@@ -6,12 +6,14 @@ import Confetti from "@/components/common/Confetti";
 
 interface HeroProps {
   onInvitationOpened?: () => void;
+  onCountdownReady?: () => void;
 }
 
-export default function Hero({ onInvitationOpened }: HeroProps) {
+export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps) {
   const [opening, setOpening] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [cardRevealed, setCardRevealed] = useState(false);
+  const [cardExiting, setCardExiting] = useState(false);
 
   const handleOpen = () => {
     setOpening(true);
@@ -23,13 +25,20 @@ export default function Hero({ onInvitationOpened }: HeroProps) {
       setShowConfetti(true);
     }, 1700);
 
-    // Step 3: After card is shown, fade out and scroll to invitation
+    // Step 3: Card stays visible for ~4.8s, then begins smooth fade-out
+    setTimeout(() => {
+      setCardExiting(true);
+    }, 6500);
+
+    // Step 4: After smooth fade-out completes, hide overlay and fire callbacks
     setTimeout(() => {
       setOpening(false);
+      setCardExiting(false);
       onInvitationOpened?.();
+      onCountdownReady?.();
       const el = document.getElementById("invitation");
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 4200);
+    }, 8000);
 
     // Stop confetti after a bit
     setTimeout(() => setShowConfetti(false), 3500);
@@ -158,9 +167,16 @@ export default function Hero({ onInvitationOpened }: HeroProps) {
         {opening && cardRevealed && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            animate={{
+              opacity: cardExiting ? 0 : 1,
+              scale: cardExiting ? 0.9 : 1,
+              filter: cardExiting ? "blur(4px)" : "blur(0px)",
+            }}
+            exit={{ opacity: 0, scale: 0.85, filter: "blur(6px)" }}
+            transition={{
+              duration: cardExiting ? 1.5 : 0.6,
+              ease: "easeInOut",
+            }}
             className="fixed inset-0 z-[998] flex items-center justify-center bg-[#F7F4EF]/95"
           >
             {/* Invitation Card with Shimmering Gold Border */}

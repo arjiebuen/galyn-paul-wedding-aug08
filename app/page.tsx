@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import ClientWrapper from "@/components/common/ClientWrapper";
 import Navbar from "@/components/common/Navbar";
 import Hero from "@/components/hero/Hero";
@@ -20,15 +21,33 @@ import ScrollToTop from "@/components/common/ScrollToTop";
 
 export default function Home() {
   const [invitationOpened, setInvitationOpened] = useState(false);
+  const [countdownReady, setCountdownReady] = useState(false);
 
   return (
     <>
       <ClientWrapper />
       <Navbar />
       <main>
-        <Hero onInvitationOpened={() => setInvitationOpened(true)} />
-        {invitationOpened && <WeddingCountdown />}
-        <Invitation />
+        <Hero
+          onInvitationOpened={() => setInvitationOpened(true)}
+          onCountdownReady={() => setCountdownReady(true)}
+        />
+        <AnimatePresence mode="wait">
+          {countdownReady && (
+            <motion.div
+              key="countdown"
+              initial={{ opacity: 0, y: 60, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 1.2,
+                ease: [0.16, 1, 0.3, 1] as const, // smooth cubic-bezier
+              }}
+            >
+              <WeddingCountdown />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {invitationOpened && <Invitation />}
         <OurStory />
         <Timeline />
         <WeddingDetails />
