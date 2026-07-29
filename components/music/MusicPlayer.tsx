@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Music, Play, Pause } from "lucide-react";
 
@@ -10,10 +10,17 @@ interface MusicPlayerProps {
 
 const AUDIO_URL = "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a";
 
+/** Detect if the device is a mobile phone (touchscreen + narrow viewport or mobile UA) */
+function isMobileDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+}
+
 export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isMobile = useRef(false);
 
   // Create audio immediately on mount, preload eagerly
   useEffect(() => {
@@ -26,6 +33,11 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     }
   }, []);
 
+  // Detect mobile on mount
+  useEffect(() => {
+    isMobile.current = isMobileDevice();
+  }, []);
+
   // Auto-play as soon as component gets green light
   useEffect(() => {
     if (!autoPlay) return;
@@ -36,7 +48,59 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     }
   }, [autoPlay]);
 
-  const handleToggle = () => {
+  // On mobile: pause when user leaves tab/window, resume when they come back
+  // On desktop: do nothing — music keeps playing until user manually stops it
+  useEffect(() => {
+    if (!autoPlay || !isMobile.current) return;
+
+    const handleVisibilityChange = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      if (document.hidden) {
+        // User left the tab — pause on mobile
+        if (!audio.paused) {
+          audio.pause();
+        }
+      } else {
+        // User came back — resume
+        if (audio.paused) {
+          audio.play().then(() => setIsPlaying(true)).catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [autoPlay]);
+
+  // Handle page blur/focus as well (catches more mobile scenarios)
+  useEffect(() => {
+    if (!autoPlay || !isMobile.current) return;
+
+    const handleBlur = () => {
+      const audio = audioRef.current;
+      if (audio && !audio.paused) {
+        audio.pause();
+      }
+    };
+
+    const handleFocus = () => {
+      const audio = audioRef.current;
+      if (audio && audio.paused) {
+        audio.play().then(() => setIsPlaying(true)).catch(() => {});
+      }
+    };
+
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [autoPlay]);
+
+  const handleToggle = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
     if (isPlaying) {
@@ -45,7 +109,7 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     } else {
       audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
-  };
+  }, [isPlaying]);
 
   return (
     <AnimatePresence>
