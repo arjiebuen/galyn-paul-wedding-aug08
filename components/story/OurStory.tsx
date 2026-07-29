@@ -4,20 +4,27 @@ import { motion } from "framer-motion";
 
 export default function OurStory() {
   return (
-    <section id="story" className="py-40 bg-[#F8F4EF]">
-      <div className="max-w-5xl mx-auto px-8">
+    <section
+      id="story"
+      className="relative py-40 bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: "url('https://res.cloudinary.com/dalnsh7fy/image/upload/v1785286485/512_lz4req.png')" }}
+    >
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/50" />
+      
+      <div className="relative max-w-5xl mx-auto px-8 z-10">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="tracking-[8px] uppercase text-center text-sm text-gray-500">
+          <p className="tracking-[8px] uppercase text-center text-sm text-white/80">
             Our Journey
           </p>
-          <h2 className="font-heading text-7xl text-center my-10">
+          <h2 className="font-heading text-7xl text-center my-10 text-white">
             A Love Story
           </h2>
-          <p className="leading-10 text-lg text-center text-gray-700 max-w-3xl mx-auto">
+          <p className="leading-10 text-lg text-center text-white/90 max-w-3xl mx-auto">
             Paul and Galyn met in 2018—well, actually, he met her, but she didn&apos;t meet him. Confusing, right? He knew her name, but she didn&apos;t know his.
             <br /><br />
             <em>&ldquo;Nakita na kita dati dito sa Luna nung nag-attend ka dito sa church namin.&rdquo;</em>
