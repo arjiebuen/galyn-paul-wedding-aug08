@@ -10,12 +10,6 @@ interface MusicPlayerProps {
 
 const AUDIO_URL = "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a";
 
-/** Detect if the device is a mobile phone (touchscreen + narrow viewport or mobile UA) */
-function isMobileDevice(): boolean {
-  if (typeof window === "undefined") return false;
-  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
-}
-
 export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
