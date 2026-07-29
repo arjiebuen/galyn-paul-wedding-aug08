@@ -8,27 +8,30 @@ interface MusicPlayerProps {
   autoPlay?: boolean;
 }
 
+const AUDIO_URL = "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a";
+
 export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Create audio immediately on mount, preload eagerly
   useEffect(() => {
-    const audio = new Audio("https://res.cloudinary.com/dalnsh7fy/video/upload/v1785244862/I_Prayed_for_You_osuzbo.m4a");
-    audio.loop = true;
-    audio.volume = 0.3;
-    audioRef.current = audio;
-
-    return () => {
-      audio.pause();
-      audioRef.current = null;
-    };
+    if (!audioRef.current) {
+      const audio = new Audio(AUDIO_URL);
+      audio.loop = true;
+      audio.volume = 0.3;
+      audio.preload = "auto";
+      audioRef.current = audio;
+    }
   }, []);
 
+  // Auto-play as soon as component gets green light
   useEffect(() => {
     if (!autoPlay) return;
     const audio = audioRef.current;
-    if (audio) {
+    if (!audio) return;
+    if (audio.paused) {
       audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   }, [autoPlay]);
@@ -63,8 +66,8 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
             </button>
 
             <div className="flex flex-col">
-              <span className="text-sm font-semibold">I Prayed for You</span>
-              <span className="text-xs text-gray-500">Matt Stell</span>
+              <span className="text-sm font-semibold">Dulo Ng Pahina</span>
+              <span className="text-xs text-gray-500">Wilbert Ross</span>
             </div>
 
             <button
