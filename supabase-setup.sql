@@ -9,34 +9,20 @@ CREATE TABLE IF NOT EXISTS rsvps (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Enable Row Level Security
+-- Enable Row Level Security (optional, can be disabled for this use case)
 ALTER TABLE rsvps ENABLE ROW LEVEL SECURITY;
 
--- Drop existing policies first to avoid conflicts
-DROP POLICY IF EXISTS "Allow anonymous inserts" ON rsvps;
-DROP POLICY IF EXISTS "Allow all reads" ON rsvps;
-
 -- Allow anonymous inserts (so the website can submit RSVPs without auth)
--- WARNING: In production, consider using a Supabase service role key server-side
--- instead of allowing anonymous inserts with unrestricted access.
-CREATE POLICY "Allow anonymous inserts"
-  ON rsvps
-  FOR INSERT
-  TO anon
+CREATE POLICY "Allow anonymous inserts" 
+  ON rsvps 
+  FOR INSERT 
+  TO anon 
   WITH CHECK (true);
 
--- Allow reading all RSVPs (for admin display purposes)
-CREATE POLICY "Allow all reads"
-  ON rsvps
-  FOR SELECT
-  TO anon
+-- Allow reading own data (optional, for admin purposes)
+CREATE POLICY "Allow all reads" 
+  ON rsvps 
+  FOR SELECT 
+  TO anon 
   USING (true);
-
--- ============================================================================
--- SECURITY RECOMMENDATION:
--- For production-grade security, replace the anonymous INSERT policy above
--- with a Supabase service role (server-side only). The API route already
--- sanitizes all inputs before inserting, but defense-in-depth is recommended.
--- ============================================================================
-
 

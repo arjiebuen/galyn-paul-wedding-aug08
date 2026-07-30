@@ -48,12 +48,12 @@ export default function EnterOverlay({ onEnter }: EnterOverlayProps) {
               transition={{ duration: 1.2, delay: 0.5 }}
               className="text-center px-6"
             >
-              <h1 className="font-heading text-5xl sm:text-7xl md:text-9xl text-white drop-shadow-lg leading-tight">
+              <h1 className="font-heading text-7xl md:text-9xl text-white drop-shadow-lg">
                 Paul
-                <span className="mx-2 sm:mx-4">&amp;</span>
+                <span className="mx-4">&amp;</span>
                 Galyn
               </h1>
-              <p className="mt-4 sm:mt-5 tracking-[6px] sm:tracking-[8px] uppercase text-xs sm:text-sm text-white/90 drop-shadow">
+              <p className="mt-5 tracking-[8px] uppercase text-sm text-white/90 drop-shadow">
                 Wedding Invitation
               </p>
               <motion.p

@@ -1,5 +1,4 @@
 import { Resend } from "resend";
-import { escapeHtml } from "@/lib/sanitize";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const notificationEmails = process.env.NOTIFICATION_EMAIL?.split(",").map((e) => e.trim()).filter(Boolean) ?? [];
@@ -28,9 +27,6 @@ export async function sendRSVPNotification(data: RSVPNotification) {
     return { success: false, error: new Error("NOTIFICATION_EMAIL is not configured") };
   }
 
-  const escapedFullName = escapeHtml(fullName);
-  const escapedMessage = message ? escapeHtml(message) : null;
-
   const html = `
     <!DOCTYPE html>
     <html>
@@ -51,7 +47,7 @@ export async function sendRSVPNotification(data: RSVPNotification) {
             <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse;">
               <tr>
                 <td style="padding: 14px 12px; border-bottom: 1px solid #eee; font-weight: 600; color: #333; font-size: 14px; width: 120px;">Name</td>
-                <td style="padding: 14px 12px; border-bottom: 1px solid #eee; color: #555; font-size: 14px;">${escapedFullName}</td>
+                <td style="padding: 14px 12px; border-bottom: 1px solid #eee; color: #555; font-size: 14px;">${fullName}</td>
               </tr>
               <tr>
                 <td style="padding: 14px 12px; border-bottom: 1px solid #eee; font-weight: 600; color: #333; font-size: 14px;">Attending</td>
@@ -66,10 +62,10 @@ export async function sendRSVPNotification(data: RSVPNotification) {
                 <td style="padding: 14px 12px; border-bottom: 1px solid #eee; color: #555; font-size: 14px;">${guests}</td>
               </tr>
               ${
-                escapedMessage
+                message
                   ? `<tr>
                 <td style="padding: 14px 12px; border-bottom: 1px solid #eee; font-weight: 600; color: #333; font-size: 14px; vertical-align: top;">Message</td>
-                <td style="padding: 14px 12px; border-bottom: 1px solid #eee; color: #555; font-size: 14px;">${escapedMessage}</td>
+                <td style="padding: 14px 12px; border-bottom: 1px solid #eee; color: #555; font-size: 14px;">${message}</td>
               </tr>`
                   : ""
               }

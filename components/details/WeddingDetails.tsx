@@ -37,7 +37,7 @@ export default function WeddingDetails() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-heading text-4xl sm:text-6xl text-center mb-10 sm:mb-16"
+          className="font-heading text-6xl text-center mb-16"
         >
           Wedding Details
         </motion.h2>
@@ -52,9 +52,9 @@ export default function WeddingDetails() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="rounded-3xl bg-white p-5 sm:p-8 shadow-xl"
+                className="rounded-3xl bg-white p-8 shadow-xl"
               >
-                <Icon className="text-[#C8A96A]" size={28} />
+                <Icon className="text-[#C8A96A]" size={40} />
                 <h3 className="mt-6 font-semibold text-xl">{item.title}</h3>
                 <p className="mt-3 text-gray-600">{item.value}</p>
               </motion.div>

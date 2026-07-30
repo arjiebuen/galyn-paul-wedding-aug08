@@ -38,7 +38,7 @@ export default function Timeline() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-heading text-4xl sm:text-6xl text-center mb-12 sm:mb-20"
+          className="font-heading text-6xl text-center mb-20"
         >
           Our Journey
         </motion.h2>
@@ -63,19 +63,19 @@ export default function Timeline() {
                 >
                   {/* Icon Circle */}
                   <div className="relative z-10 flex-shrink-0 md:absolute md:left-0 md:translate-x-[-50%]">
-                    <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-[#F8F4EF] border-2 border-[#D8C3B5] flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-[#F8F4EF] border-2 border-[#D8C3B5] flex items-center justify-center">
                       <Icon className="text-[#C8A96A]" size={24} />
                     </div>
                   </div>
 
                   {/* Content Card */}
                   <div className="flex-1 md:ml-20">
-                    <div className="rounded-2xl bg-[#F8F4EF] p-4 sm:p-6 shadow-lg">
-                      <span className="text-[#C8A96A] font-semibold text-xs sm:text-sm tracking-widest uppercase">
+                    <div className="rounded-2xl bg-[#F8F4EF] p-6 shadow-lg">
+                      <span className="text-[#C8A96A] font-semibold text-sm tracking-widest uppercase">
                         {item.date}
                       </span>
-                      <h3 className="text-xl sm:text-2xl font-semibold mt-2">{item.title}</h3>
-                      <p className="text-sm sm:text-base text-gray-600 mt-3 leading-relaxed">{item.description}</p>
+                      <h3 className="text-2xl font-semibold mt-2">{item.title}</h3>
+                      <p className="text-gray-600 mt-3 leading-relaxed">{item.description}</p>
                     </div>
                   </div>
                 </motion.div>

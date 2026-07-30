@@ -21,47 +21,65 @@ import Footer from "@/components/footer/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
 
 export default function Home() {
-  const [invitationOpened, setInvitationOpened] = useState(false);
-  const [countdownReady, setCountdownReady] = useState(false);
+  const [initialSectionsLoaded, setInitialSectionsLoaded] = useState(false);
+  const [fullSiteLoaded, setFullSiteLoaded] = useState(false);
+
+  const handleEnter = () => {
+    setInitialSectionsLoaded(true);
+  };
+
+  const handleFullSiteLoaded = () => {
+    setFullSiteLoaded(true);
+  };
 
   return (
     <>
-      <ClientWrapper />
-      <Navbar />
+      <ClientWrapper onEnter={handleEnter} />
+      <Navbar visible={fullSiteLoaded} />
       <main>
-        <Hero
-          onInvitationOpened={() => setInvitationOpened(true)}
-          onCountdownReady={() => setCountdownReady(true)}
-        />
-        <AnimatePresence mode="wait">
-          {countdownReady && (
-            <motion.div
-              key="countdown"
-              initial={{ opacity: 0, y: 60, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 1.2,
-                ease: [0.16, 1, 0.3, 1] as const, // smooth cubic-bezier
-              }}
-            >
-              <WeddingCountdown />
-            </motion.div>
-          )}
-        </AnimatePresence>
-        {invitationOpened && <Invitation />}
-        <OurStory />
-        <Timeline />
-        <WeddingDetails />
-        <DressCode />
-        <Entourage />
-        <Gallery />
-        <Venue />
-        <RSVP />
-        <FAQ />
-        <PhotoUpload />
+        {/* Hero - only after tap to enter */}
+        {initialSectionsLoaded && (
+          <Hero onFullSiteLoaded={handleFullSiteLoaded} />
+        )}
+
+        {/* Full Site sections - only render after 15s invitation overlay */}
+        {fullSiteLoaded && (
+          <>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key="countdown"
+                initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.16, 1, 0.3, 1] as const,
+                }}
+              >
+                <WeddingCountdown />
+              </motion.div>
+            </AnimatePresence>
+            <Invitation />
+            <WeddingDetails />
+            <DressCode />
+            <Entourage />
+            <Venue />
+            <RSVP />
+            <FAQ />
+            <PhotoUpload />
+          </>
+        )}
+
+        {/* Initial sections - visible immediately after tap to enter */}
+        {initialSectionsLoaded && (
+          <>
+            <OurStory />
+            <Timeline />
+            <Gallery />
+          </>
+        )}
       </main>
-      <Footer />
-      <ScrollToTop />
+      {initialSectionsLoaded && <Footer />}
+      {fullSiteLoaded && <ScrollToTop />}
     </>
   );
 }

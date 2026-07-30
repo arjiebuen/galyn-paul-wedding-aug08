@@ -25,9 +25,15 @@ function scrollToSection(href: string) {
   }
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  visible?: boolean;
+}
+
+export default function Navbar({ visible = true }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  if (!visible) return null;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);

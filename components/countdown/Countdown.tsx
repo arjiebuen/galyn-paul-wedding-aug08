@@ -1,32 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 const weddingDate = new Date("2026-08-30T15:00:00");
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.7,
-      ease: [0.16, 1, 0.3, 1] as const,
-    },
-  },
-};
 
 export default function WeddingCountdown() {
   const [timeLeft, setTimeLeft] = useState({
@@ -64,36 +40,25 @@ export default function WeddingCountdown() {
   ];
 
   return (
-    <section className="py-32 overflow-hidden">
+    <section className="py-32">
       <div className="container mx-auto text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-          className="mb-10 sm:mb-14 text-4xl sm:text-6xl font-bold"
-        >
+        <h2 className="mb-14 text-6xl font-bold">
           Counting Down
-        </motion.h2>
+        </h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-2 gap-6 md:grid-cols-4"
-        >
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
           {items.map(([label, value]) => (
-            <motion.div
+            <div
               key={label}
-              variants={itemVariants}
-              className="rounded-3xl bg-white p-4 sm:p-8 shadow-xl"
+              className="rounded-3xl bg-white p-8 shadow-xl"
             >
-              <h3 className="text-3xl sm:text-5xl font-bold">{value}</h3>
-              <p className="mt-1 sm:mt-3 uppercase tracking-widest text-xs sm:text-base text-gray-500">
+              <h3 className="text-5xl font-bold">{value}</h3>
+              <p className="mt-3 uppercase tracking-widest text-gray-500">
                 {label}
               </p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

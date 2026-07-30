@@ -1,19 +1,50 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
+import { verifyPassword } from "@/lib/password";
 
 interface HeroProps {
-  onInvitationOpened?: () => void;
-  onCountdownReady?: () => void;
+  onFullSiteLoaded?: () => void;
 }
 
-export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps) {
+export default function Hero({ onFullSiteLoaded }: HeroProps) {
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const [opening, setOpening] = useState(false);
   const [cardRevealed, setCardRevealed] = useState(false);
   const [cardExiting, setCardExiting] = useState(false);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const handleOpen = () => {
+  const clearTimers = useCallback(() => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  }, []);
+
+  const handleOpenClick = () => {
+    setShowPasswordDialog(true);
+    setTimeout(() => passwordInputRef.current?.focus(), 100);
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const input = passwordInputRef.current?.value ?? "";
+    const isValid = await verifyPassword(input);
+    if (isValid) {
+      setPasswordError(false);
+      setShowPasswordDialog(false);
+      startOpeningSequence();
+    } else {
+      setPasswordError(true);
+      if (passwordInputRef.current) {
+        passwordInputRef.current.value = "";
+        passwordInputRef.current.focus();
+      }
+    }
+  };
+
+  const startOpeningSequence = () => {
     setOpening(true);
 
     // Envelope animation: 0-1s, then card reveals at 1s
@@ -21,26 +52,19 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
       setCardRevealed(true);
     }, 1000);
 
-    // Card visible for ~7s, then fades out (8s total)
+    // Card visible for ~13s, then fades out (14s total)
     const t2 = setTimeout(() => {
       setCardExiting(true);
-    }, 8000);
+    }, 14000);
 
-    // Overlay fully gone at 10s
+    // Overlay fully gone at 15s, then load full site
     const t3 = setTimeout(() => {
       setOpening(false);
       setCardExiting(false);
-      onInvitationOpened?.();
-      onCountdownReady?.();
-      const el = document.getElementById("invitation");
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 10000);
+      onFullSiteLoaded?.();
+    }, 15000);
 
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-    };
+    timersRef.current = [t1, t2, t3];
   };
 
   return (
@@ -71,7 +95,7 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
           <p className="mt-6 sm:mt-10 text-base sm:text-lg">August 30, 2026</p>
 
           <motion.button
-            onClick={handleOpen}
+            onClick={handleOpenClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="mt-6 sm:mt-10 rounded-full bg-white px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base text-black font-medium transition cursor-pointer flex items-center gap-2 mx-auto"
@@ -81,6 +105,77 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
           </motion.button>
         </motion.div>
       </section>
+
+      {/* Password Dialog */}
+      <AnimatePresence>
+        {showPasswordDialog && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setShowPasswordDialog(false);
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="bg-white rounded-3xl p-8 sm:p-10 max-w-sm w-[90%] mx-auto shadow-2xl text-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-4xl mb-4">🔐</div>
+              <h3 className="font-heading text-2xl text-[#3A312C] mb-2">
+                Access Required
+              </h3>
+              <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+                Please contact the bride or groom to receive your access password.
+              </p>
+
+              <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                <div>
+                  <input
+                    ref={passwordInputRef}
+                    type="password"
+                    placeholder="Enter password"
+                    autoComplete="off"
+                    className={`w-full px-4 py-3 rounded-xl border ${
+                      passwordError ? "border-red-400 bg-red-50" : "border-gray-200"
+                    } text-center text-lg tracking-widest outline-none focus:border-[#C8A96A] transition-colors`}
+                    onChange={() => setPasswordError(false)}
+                  />
+                  {passwordError && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-xs mt-2"
+                    >
+                      Incorrect password. Please try again.
+                    </motion.p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 rounded-xl bg-[#C8A96A] text-white font-semibold hover:bg-[#b8985e] transition-colors"
+                >
+                  Unlock Invitation
+                </button>
+              </form>
+
+              <button
+                type="button"
+                onClick={() => setShowPasswordDialog(false)}
+                className="mt-4 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                Cancel
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Envelope & Card Opening Overlay */}
       <AnimatePresence>
@@ -158,7 +253,7 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
         )}
       </AnimatePresence>
 
-      {/* Full Invitation Card Reveal */}
+      {/* Full Invitation Card Reveal - 15 seconds */}
       <AnimatePresence>
         {opening && cardRevealed && (
           <motion.div
@@ -175,12 +270,16 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
             }}
             className="fixed inset-0 z-[998] flex items-center justify-center bg-[#F7F4EF]/95"
           >
+            {/* Dark backdrop to prevent clicking through */}
+            <div className="absolute inset-0" />
+
             {/* Invitation Card with Shimmering Gold Border */}
             <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="relative max-w-lg w-[90%] mx-auto"
+              onClick={(e) => e.stopPropagation()}
             >
               {/* Glow behind card */}
               <motion.div
@@ -282,14 +381,14 @@ export default function Hero({ onInvitationOpened, onCountdownReady }: HeroProps
                     className="h-px bg-gradient-to-r from-transparent via-[#C8A96A] to-transparent mt-8 origin-center"
                   />
 
-                  {/* Subtle scroll text */}
+                  {/* Timer / scroll text */}
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: [0, 0.5, 0] }}
                     transition={{ duration: 2, delay: 2.0, repeat: Infinity }}
                     className="mt-6 text-[10px] tracking-[4px] uppercase text-gray-300"
                   >
-                    Opening invitation...
+                    Please wait while we prepare your experience...
                   </motion.p>
                 </div>
               </motion.div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Music, Play, Pause } from "lucide-react";
 
@@ -8,101 +8,32 @@ interface MusicPlayerProps {
   autoPlay?: boolean;
 }
 
-const AUDIO_URL = "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a";
-
 export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const autoPlayRef = useRef(autoPlay);
 
-  // Keep ref in sync
   useEffect(() => {
-    autoPlayRef.current = autoPlay;
-  }, [autoPlay]);
-
-  // Create audio immediately on mount, preload eagerly
-  useEffect(() => {
-    if (!audioRef.current) {
-      const audio = new Audio(AUDIO_URL);
-      audio.loop = true;
-      audio.volume = 0.3;
-      audio.preload = "auto";
-      audioRef.current = audio;
-    }
+    const audio = new Audio("https://res.cloudinary.com/dalnsh7fy/video/upload/v1785244862/I_Prayed_for_You_osuzbo.m4a");
+    audio.loop = true;
+    audio.volume = 0.3;
+    audioRef.current = audio;
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      audio.pause();
+      audioRef.current = null;
     };
   }, []);
 
-  // Auto-play as soon as component gets green light
   useEffect(() => {
     if (!autoPlay) return;
     const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
+    if (audio) {
       audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   }, [autoPlay]);
 
-  // ─── SECURED: pause on ANY user-leaves-page scenario ───
-  // Covers: tab switch, window blur/minimize, mobile Safari bfcache,
-  //         browser freeze/resource-saving, page close/navigate away
-  useEffect(() => {
-    const pauseAudio = () => {
-      if (!autoPlayRef.current) return;
-      const audio = audioRef.current;
-      if (!audio) return;
-      // Unconditionally pause — no check for audio.paused to ensure
-      // it catches every edge case even if state is somehow out of sync
-      try {
-        audio.pause();
-      } catch {
-        // silently fail
-      }
-      setIsPlaying(false);
-    };
-
-    // 1. Visibility change — tab switch, minimize, lock screen
-    const handleVisibility = () => {
-      if (document.hidden) {
-        pauseAudio();
-      }
-    };
-
-    // 2. Window blur — click outside, alt+tab, etc.
-    const handleBlur = () => {
-      pauseAudio();
-    };
-
-    // 3. Page hide — mobile Safari bfcache, navigating away
-    const handlePageHide = () => {
-      pauseAudio();
-    };
-
-    // 4. Browser freeze — resource-saving mode (Chrome, etc.)
-    const handleFreeze = () => {
-      pauseAudio();
-    };
-
-    document.addEventListener("visibilitychange", handleVisibility);
-    window.addEventListener("blur", handleBlur);
-    window.addEventListener("pagehide", handlePageHide);
-    document.addEventListener("freeze", handleFreeze);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibility);
-      window.removeEventListener("blur", handleBlur);
-      window.removeEventListener("pagehide", handlePageHide);
-      document.removeEventListener("freeze", handleFreeze);
-    };
-  }, []); // no deps — always active, uses ref for autoPlay
-
-  const handleToggle = useCallback(() => {
+  const handleToggle = () => {
     const audio = audioRef.current;
     if (!audio) return;
     if (isPlaying) {
@@ -111,7 +42,7 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     } else {
       audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
-  }, [isPlaying]);
+  };
 
   return (
     <AnimatePresence>
@@ -132,8 +63,8 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
             </button>
 
             <div className="flex flex-col">
-              <span className="text-sm font-semibold">Dulo Ng Pahina</span>
-              <span className="text-xs text-gray-500">Wilbert Ross</span>
+              <span className="text-sm font-semibold">I Prayed for You</span>
+              <span className="text-xs text-gray-500">Matt Stell</span>
             </div>
 
             <button

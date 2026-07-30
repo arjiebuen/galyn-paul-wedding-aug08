@@ -18,7 +18,7 @@ const fadeUp = {
 
 export default function Invitation() {
   return (
-    <section id="invitation" className="py-20 sm:py-32 bg-white overflow-hidden">
+    <section id="invitation" className="py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -67,21 +67,21 @@ export default function Invitation() {
           <motion.h2
             variants={fadeUp}
             custom={2}
-            className="font-heading text-5xl sm:text-7xl md:text-8xl leading-tight"
+            className="font-heading text-7xl md:text-8xl leading-tight"
           >
             Paul
           </motion.h2>
           <motion.p
             variants={fadeUp}
             custom={3}
-            className="text-xl sm:text-2xl md:text-3xl font-heading italic my-3 sm:my-4 text-[#C8A96A]"
+            className="text-2xl md:text-3xl font-heading italic my-4 text-[#C8A96A]"
           >
             &amp;
           </motion.p>
           <motion.h2
             variants={fadeUp}
             custom={4}
-            className="font-heading text-5xl sm:text-7xl md:text-8xl leading-tight"
+            className="font-heading text-7xl md:text-8xl leading-tight"
           >
             Galyn
           </motion.h2>
@@ -91,10 +91,10 @@ export default function Invitation() {
             custom={5}
             className="mt-10 space-y-3"
           >
-            <p className="text-base sm:text-lg text-gray-600">
+            <p className="text-lg text-gray-600">
               Request the honor of your presence
             </p>
-            <p className="text-base sm:text-lg text-gray-600">
+            <p className="text-lg text-gray-600">
               as they exchange wedding vows
             </p>
           </motion.div>
@@ -104,7 +104,7 @@ export default function Invitation() {
             custom={6}
             className="mt-12 inline-block border-t border-b border-[#D8C3B5] py-4 px-8"
           >
-            <p className="text-xl sm:text-2xl font-heading text-[#3A312C]">
+            <p className="text-2xl font-heading text-[#3A312C]">
               August 30, 2026
             </p>
             <p className="text-sm text-gray-500 mt-1 tracking-widest uppercase">
@@ -117,7 +117,7 @@ export default function Invitation() {
             custom={7}
             className="mt-12"
           >
-            <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl mx-auto">
+            <p className="text-gray-600 leading-relaxed max-w-xl mx-auto">
               Your presence at our wedding is the greatest gift we could ask for.
               Join us as we begin our forever together, surrounded by the people
               who mean the most to us.
