@@ -36,6 +36,26 @@ export default function MusicPlayer({ autoPlay = false, track, onBeat }: MusicPl
   }, [onBeat]);
 
   useEffect(() => {
+    const pauseWhenInactive = () => {
+      const audio = audioRef.current;
+      if (!audio || audio.paused) return;
+      audio.pause();
+      setIsPlaying(false);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) pauseWhenInactive();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", pauseWhenInactive);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", pauseWhenInactive);
+    };
+  }, []);
+
+  useEffect(() => {
     const audio = new Audio();
     audio.crossOrigin = "anonymous";
     audio.src = currentTrack.src;
