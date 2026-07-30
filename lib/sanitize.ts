@@ -11,19 +11,31 @@ export function stripHtmlTags(input: string): string {
 }
 
 /**
+ * Build an HTML entity string like "&amp;" without the entity being decoded.
+ */
+function entity(name: string): string {
+  return "\x26" + name + ";";
+}
+
+/**
  * Escape HTML special characters to prevent HTML injection.
- * Converts < > & " ' to their HTML entity equivalents.
+ * Converts & < > " ' / to their HTML entity equivalents.
  */
 export function escapeHtml(input: string): string {
-  const map: Record<string, string> = {
-    "&": "&amp;",
-    "<": "<",
-    ">": ">",
-    '"': """,
-    "'": "&#x27;",
-    "/": "&#x2F;",
-  };
-  return input.replace(/[&<>"'/]/g, (char) => map[char]);
+  const amp = entity("amp");
+  const lt = entity("lt");
+  const gt = entity("gt");
+  const quot = entity("quot");
+  const apos = entity("#x27");
+  const sol = entity("#x2F");
+
+  return input
+    .replace(/&/g, amp)
+    .replace(/</g, lt)
+    .replace(/>/g, gt)
+    .replace(/"/g, quot)
+    .replace(/'/g, apos)
+    .replace(/\//g, sol);
 }
 
 /**
