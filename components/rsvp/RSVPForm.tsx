@@ -73,6 +73,7 @@ export default function RSVPForm({ onSuccess }: RSVPFormProps) {
         <input
           {...register("fullName")}
           placeholder="Enter your full name"
+          maxLength={100}
           className="w-full px-5 py-4 rounded-2xl bg-white/60 border border-gray-200 focus:border-[#C8A96A] focus:ring-2 focus:ring-[#C8A96A]/20 outline-none transition-all"
         />
         {errors.fullName && (
@@ -89,6 +90,7 @@ export default function RSVPForm({ onSuccess }: RSVPFormProps) {
           {...register("email")}
           type="email"
           placeholder="Enter your email address"
+          maxLength={254}
           className="w-full px-5 py-4 rounded-2xl bg-white/60 border border-gray-200 focus:border-[#C8A96A] focus:ring-2 focus:ring-[#C8A96A]/20 outline-none transition-all"
         />
         {errors.email && (
@@ -158,6 +160,7 @@ export default function RSVPForm({ onSuccess }: RSVPFormProps) {
           {...register("message")}
           rows={3}
           placeholder="Write a heartfelt message for the couple..."
+          maxLength={1000}
           className="w-full px-5 py-4 rounded-2xl bg-white/60 border border-gray-200 focus:border-[#C8A96A] focus:ring-2 focus:ring-[#C8A96A]/20 outline-none transition-all resize-none"
         />
       </div>
