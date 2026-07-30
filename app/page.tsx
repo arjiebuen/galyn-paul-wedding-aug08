@@ -19,10 +19,12 @@ import FAQ from "@/components/faq/FAQ";
 import PhotoUpload from "@/components/footer/PhotoUpload";
 import Footer from "@/components/footer/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
+import MusicPlayer from "@/components/music/MusicPlayer";
 
 export default function Home() {
   const [initialSectionsLoaded, setInitialSectionsLoaded] = useState(false);
   const [fullSiteLoaded, setFullSiteLoaded] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
   const handleEnter = () => {
     setInitialSectionsLoaded(true);
@@ -35,11 +37,20 @@ export default function Home() {
   return (
     <>
       <ClientWrapper onEnter={handleEnter} />
+      {initialSectionsLoaded && (
+        <MusicPlayer
+          autoPlay
+          track={authenticated ? "afterAuthentication" : "opening"}
+        />
+      )}
       <Navbar visible={fullSiteLoaded} />
       <main>
         {/* Hero - only after tap to enter */}
         {initialSectionsLoaded && (
-          <Hero onFullSiteLoaded={handleFullSiteLoaded} />
+          <Hero
+            onAuthenticated={() => setAuthenticated(true)}
+            onFullSiteLoaded={handleFullSiteLoaded}
+          />
         )}
 
         {/* Full Site sections - only render after 15s invitation overlay */}

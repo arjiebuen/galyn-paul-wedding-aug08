@@ -6,9 +6,10 @@ import { verifyPassword } from "@/lib/password";
 
 interface HeroProps {
   onFullSiteLoaded?: () => void;
+  onAuthenticated?: () => void;
 }
 
-export default function Hero({ onFullSiteLoaded }: HeroProps) {
+export default function Hero({ onFullSiteLoaded, onAuthenticated }: HeroProps) {
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +36,7 @@ export default function Hero({ onFullSiteLoaded }: HeroProps) {
     if (isValid) {
       setPasswordError(false);
       setShowPasswordDialog(false);
+      onAuthenticated?.();
       startOpeningSequence();
     } else {
       setPasswordError(true);

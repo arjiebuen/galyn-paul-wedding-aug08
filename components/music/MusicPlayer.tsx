@@ -6,32 +6,43 @@ import { Music, Play, Pause } from "lucide-react";
 
 interface MusicPlayerProps {
   autoPlay?: boolean;
+  track: "opening" | "afterAuthentication";
 }
 
-export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
+const tracks = {
+  opening: {
+    src: "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785244862/I_Prayed_for_You_osuzbo.m4a",
+    title: "I Prayed for You",
+    artist: "Matt Stell",
+  },
+  afterAuthentication: {
+    src: "https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a",
+    title: "Dulo Ng Pahina",
+    artist: "Wilbert Ross",
+  },
+} as const;
+
+export default function MusicPlayer({ autoPlay = false, track }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const currentTrack = tracks[track];
 
   useEffect(() => {
-    const audio = new Audio("https://res.cloudinary.com/dalnsh7fy/video/upload/v1785297636/Wilbert_Ross_-_Dulo_Ng_Pahina_Official_Lyric_Video_M4A_128K_ntktp9.m4a");
+    const audio = new Audio(currentTrack.src);
     audio.loop = true;
     audio.volume = 0.3;
     audioRef.current = audio;
 
+    if (autoPlay) {
+      audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    }
+
     return () => {
       audio.pause();
-      audioRef.current = null;
+      if (audioRef.current === audio) audioRef.current = null;
     };
-  }, []);
-
-  useEffect(() => {
-    if (!autoPlay) return;
-    const audio = audioRef.current;
-    if (audio) {
-      audio.play().then(() => setIsPlaying(true)).catch(() => {});
-    }
-  }, [autoPlay]);
+  }, [autoPlay, currentTrack.src]);
 
   const handleToggle = () => {
     const audio = audioRef.current;
@@ -63,8 +74,8 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
             </button>
 
             <div className="flex flex-col">
-              <span className="text-sm font-semibold">I Prayed for You</span>
-              <span className="text-xs text-gray-500">Matt Stell</span>
+              <span className="text-sm font-semibold">{currentTrack.title}</span>
+              <span className="text-xs text-gray-500">{currentTrack.artist}</span>
             </div>
 
             <button
