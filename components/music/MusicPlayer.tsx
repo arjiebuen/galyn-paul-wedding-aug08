@@ -14,6 +14,12 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const autoPlayRef = useRef(autoPlay);
+
+  // Keep ref in sync
+  useEffect(() => {
+    autoPlayRef.current = autoPlay;
+  }, [autoPlay]);
 
   // Create audio immediately on mount, preload eagerly
   useEffect(() => {
@@ -24,6 +30,13 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
       audio.preload = "auto";
       audioRef.current = audio;
     }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
   }, []);
 
   // Auto-play as soon as component gets green light
@@ -36,36 +49,58 @@ export default function MusicPlayer({ autoPlay = false }: MusicPlayerProps) {
     }
   }, [autoPlay]);
 
-  // Pause music when user leaves the page/tab/window on ALL devices
-  // Does NOT auto-resume — music stays paused until user manually clicks play
+  // ─── SECURED: pause on ANY user-leaves-page scenario ───
+  // Covers: tab switch, window blur/minimize, mobile Safari bfcache,
+  //         browser freeze/resource-saving, page close/navigate away
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!autoPlay) return;
+    const pauseAudio = () => {
+      if (!autoPlayRef.current) return;
       const audio = audioRef.current;
-      if (!audio || audio.paused) return;
-
-      if (document.hidden) {
-        setIsPlaying(false);
+      if (!audio) return;
+      // Unconditionally pause — no check for audio.paused to ensure
+      // it catches every edge case even if state is somehow out of sync
+      try {
         audio.pause();
+      } catch {
+        // silently fail
+      }
+      setIsPlaying(false);
+    };
+
+    // 1. Visibility change — tab switch, minimize, lock screen
+    const handleVisibility = () => {
+      if (document.hidden) {
+        pauseAudio();
       }
     };
 
+    // 2. Window blur — click outside, alt+tab, etc.
     const handleBlur = () => {
-      if (!autoPlay) return;
-      const audio = audioRef.current;
-      if (!audio || audio.paused) return;
-      setIsPlaying(false);
-      audio.pause();
+      pauseAudio();
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    // 3. Page hide — mobile Safari bfcache, navigating away
+    const handlePageHide = () => {
+      pauseAudio();
+    };
+
+    // 4. Browser freeze — resource-saving mode (Chrome, etc.)
+    const handleFreeze = () => {
+      pauseAudio();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
     window.addEventListener("blur", handleBlur);
+    window.addEventListener("pagehide", handlePageHide);
+    document.addEventListener("freeze", handleFreeze);
 
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("pagehide", handlePageHide);
+      document.removeEventListener("freeze", handleFreeze);
     };
-  }, [autoPlay]);
+  }, []); // no deps — always active, uses ref for autoPlay
 
   const handleToggle = useCallback(() => {
     const audio = audioRef.current;

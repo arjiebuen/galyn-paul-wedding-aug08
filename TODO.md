@@ -1,10 +1,26 @@
-# Security Hardening TODO
+# Implementation Tasks - COMPLETED ✅
 
-## Completed Steps
-- [ ] 1. `lib/sanitize.ts` — Create HTML sanitization utility
-- [ ] 2. `lib/validation.ts` — Add max length constraints, stricter patterns
-- [ ] 3. `app/api/rsvp/route.ts` — Add rate limiting, request size limits, CSRF check, input sanitization
-- [ ] 4. `lib/email.ts` — Add HTML entity escaping for all user values
-- [ ] 5. `components/rsvp/RSVPForm.tsx` — Add maxLength attributes client-side
-- [ ] 6. Commit & push to Vercel
+## ✅ Step 1: Update Beige color in DressCode.tsx
+- [x] Changed `"Beige": "#F5F5DC"` → `"Beige": "#F1DEC9"`
+- [x] Redesigned Dress Guide layout per user's request:
+  - Renamed "Groomsmen & Bridesmaids" → "Bridesmaids & Groomsmen"
+  - Changed title from "Dress Guide" → "Dress Code"
+  - Separated Guests into its own card with "Semi-Formal Attire" subtitle
+  - Added "Please wear colors that complement our wedding palette" text
+  - Moved white dress notice to bottom with divider separators
+  - Changed grid from 2-column to 3-column for main categories
+  - Added decorative dividers and animations
 
+## ✅ Step 2: Create PhotoUpload component
+- [x] Created `galyn-paul-wedding/components/footer/PhotoUpload.tsx`
+- [x] Mark 10:9 ESV verse with glass effect (backdrop-blur-xl, white/10 bg, border)
+- [x] QR code image from Cloudinary URL
+- [x] Upload message text
+- [x] Dark background (#3A312C) section between FAQ and Footer
+
+## ✅ Step 3: Update page.tsx
+- [x] Imported PhotoUpload component
+- [x] Rendered it between FAQ and Footer
+
+## ✅ Step 4: Build verification
+- [ ] Build passing (awaiting completion)

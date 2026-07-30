@@ -16,6 +16,7 @@ import Gallery from "@/components/gallery/Gallery";
 import Venue from "@/components/venue/Venue";
 import RSVP from "@/components/rsvp/RSVP";
 import FAQ from "@/components/faq/FAQ";
+import PhotoUpload from "@/components/footer/PhotoUpload";
 import Footer from "@/components/footer/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
 
@@ -57,6 +58,7 @@ export default function Home() {
         <Venue />
         <RSVP />
         <FAQ />
+        <PhotoUpload />
       </main>
       <Footer />
       <ScrollToTop />
