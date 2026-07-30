@@ -22,5 +22,9 @@
 - [x] Imported PhotoUpload component
 - [x] Rendered it between FAQ and Footer
 
-## ✅ Step 4: Build verification
+## ✅ Step 4: Unified all dress code colors to Golden Brown (#C8A96A) — matching Officiating Minister's color
+- [x] Updated all palette arrays in DressCode.tsx (Sponsors, Bridesmaids, Groomsmen, Flower Girls, Guests) to `["Golden Brown"]`
+- [x] Updated data/wedding.ts attire colors to `"Golden Brown"`
+
+## ✅ Step 5: Build verification
 - [ ] Build passing (awaiting completion)

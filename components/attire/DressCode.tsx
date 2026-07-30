@@ -12,11 +12,11 @@ const colorMap: Record<string, string> = {
   "Soft Peach": "#FFDAB9",
 };
 
-const sponsorsPalette = ["Golden Brown", "Taupe", "Blush Pink", "Dusty Peach"];
-const bridesmaidsPalette = ["Taupe", "Nude Beige"];
-const groomsmenPalette = ["Taupe", "Nude Beige"];
-const flowerGirlsPalette = ["Bright Pink", "Soft Peach"];
-const guestsPalette = ["Golden Brown", "Taupe", "Blush Pink", "Dusty Peach"];
+const sponsorsPalette = ["Golden Brown"];
+const bridesmaidsPalette = ["Golden Brown"];
+const groomsmenPalette = ["Golden Brown"];
+const flowerGirlsPalette = ["Golden Brown"];
+const guestsPalette = ["Golden Brown"];
 
 function ColorCircles({ colors }: { colors: string[] }) {
   return (

@@ -12,21 +12,19 @@ export const wedding = {
     theme: "Semi Formal",
 
     sponsors: [
-      "Beige",
-      "Blush Pink",
+      "Golden Brown",
     ],
 
     entourage: [
-      "Beige",
+      "Golden Brown",
     ],
 
     flowerGirls: [
-      "Blush Pink",
+      "Golden Brown",
     ],
 
     guests: [
-      "Beige",
-      "Blush Pink",
+      "Golden Brown",
     ],
   },
 
