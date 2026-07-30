@@ -1,0 +1,17 @@
+{
+  "name": "Paul & Galyn Wedding",
+  "short_name": "Paul & Galyn",
+  "description": "Join us as we celebrate our wedding on August 30, 2026",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F4EF",
+  "theme_color": "#C8A96A",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
+
