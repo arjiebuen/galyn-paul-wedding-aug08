@@ -13,18 +13,26 @@ export const wedding = {
 
     sponsors: [
       "Golden Brown",
+      "Warm Taupe",
+      "Blush Pink",
+      "Dusty Peach",
     ],
 
     entourage: [
-      "Golden Brown",
+      "Nude Beige",
+      "Warm Taupe",
     ],
 
     flowerGirls: [
-      "Golden Brown",
+      "Rosy Pink",
+      "Soft Peach",
     ],
 
     guests: [
       "Golden Brown",
+      "Warm Taupe",
+      "Blush Pink",
+      "Dusty Peach",
     ],
   },
 

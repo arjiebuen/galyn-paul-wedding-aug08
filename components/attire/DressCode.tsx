@@ -3,20 +3,20 @@
 import { motion } from "framer-motion";
 
 const colorMap: Record<string, string> = {
-  "Golden Brown": "#C8A96A",
-  Taupe: "#A0846B",
-  "Blush Pink": "#DE5D83",
-  "Dusty Peach": "#E6A88A",
-  "Nude Beige": "#F1DEC9",
-  "Bright Pink": "#E75480",
-  "Soft Peach": "#FFDAB9",
+  "Golden Brown": "#B79050",
+  "Warm Taupe": "#C9A188",
+  "Blush Pink": "#EEC7CC",
+  "Dusty Peach": "#EFB3A8",
+  "Nude Beige": "#D2B28D",
+  "Rosy Pink": "#EA89D0",
+  "Soft Peach": "#F4B2A7",
 };
 
-const sponsorsPalette = ["Golden Brown"];
-const bridesmaidsPalette = ["Golden Brown"];
-const groomsmenPalette = ["Golden Brown"];
-const flowerGirlsPalette = ["Golden Brown"];
-const guestsPalette = ["Golden Brown"];
+const sponsorsPalette = ["Golden Brown", "Warm Taupe", "Blush Pink", "Dusty Peach"];
+const bridesmaidsPalette = ["Nude Beige", "Warm Taupe"];
+const groomsmenPalette = ["Warm Taupe", "Nude Beige"];
+const flowerGirlsPalette = ["Rosy Pink", "Soft Peach"];
+const guestsPalette = ["Golden Brown", "Warm Taupe", "Blush Pink", "Dusty Peach"];
 
 function ColorCircles({ colors }: { colors: string[] }) {
   return (
