@@ -7,6 +7,7 @@ import { Music, Play, Pause } from "lucide-react";
 interface MusicPlayerProps {
   autoPlay?: boolean;
   track: "opening" | "afterAuthentication";
+  onBeat?: (intensity: number) => void;
 }
 
 const tracks = {
@@ -22,21 +23,60 @@ const tracks = {
   },
 } as const;
 
-export default function MusicPlayer({ autoPlay = false, track }: MusicPlayerProps) {
+export default function MusicPlayer({ autoPlay = false, track, onBeat }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const beatHandlerRef = useRef(onBeat);
   const currentTrack = tracks[track];
 
   useEffect(() => {
-    const audio = new Audio(currentTrack.src);
+    beatHandlerRef.current = onBeat;
+  }, [onBeat]);
+
+  useEffect(() => {
+    const audio = new Audio();
+    audio.crossOrigin = "anonymous";
+    audio.src = currentTrack.src;
     audio.loop = true;
     audio.volume = 0.3;
     audioRef.current = audio;
+    let animationFrame = 0;
+    let audioContext: AudioContext | undefined;
+
+    try {
+      audioContext = new AudioContext();
+      audioContextRef.current = audioContext;
+      const analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaElementSource(audio);
+      analyser.fftSize = 64;
+      analyser.smoothingTimeConstant = 0.76;
+      const frequencies = new Uint8Array(analyser.frequencyBinCount);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+
+      let averageBass = 0;
+      const detectBeat = () => {
+        if (!audio.paused) {
+          analyser.getByteFrequencyData(frequencies);
+          const bass = (frequencies[0] + frequencies[1] + frequencies[2] + frequencies[3]) / 4;
+          if (bass > Math.max(64, averageBass * 1.22)) {
+            beatHandlerRef.current?.(Math.min(1, bass / 180));
+          }
+          averageBass = averageBass * 0.9 + bass * 0.1;
+        }
+        animationFrame = requestAnimationFrame(detectBeat);
+      };
+      detectBeat();
+    } catch {
+      // Music remains playable even if a browser blocks audio analysis.
+    }
 
     const startTrack = () => {
       if (track === "opening") audio.currentTime = 70;
       if (autoPlay) {
+        void audioContext?.resume();
         audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
       }
     };
@@ -49,7 +89,10 @@ export default function MusicPlayer({ autoPlay = false, track }: MusicPlayerProp
     }
 
     return () => {
+      cancelAnimationFrame(animationFrame);
       audio.pause();
+      void audioContext?.close();
+      if (audioContextRef.current === audioContext) audioContextRef.current = null;
       if (audioRef.current === audio) audioRef.current = null;
     };
   }, [autoPlay, currentTrack.src, track]);
@@ -61,6 +104,7 @@ export default function MusicPlayer({ autoPlay = false, track }: MusicPlayerProp
       audio.pause();
       setIsPlaying(false);
     } else {
+      void audioContextRef.current?.resume();
       audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   };

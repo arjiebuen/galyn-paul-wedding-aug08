@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ClientWrapper from "@/components/common/ClientWrapper";
 import Navbar from "@/components/common/Navbar";
@@ -20,11 +20,14 @@ import PhotoUpload from "@/components/footer/PhotoUpload";
 import Footer from "@/components/footer/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import MusicPlayer from "@/components/music/MusicPlayer";
+import FireflyEffect from "@/components/common/FireflyEffect";
 
 export default function Home() {
   const [initialSectionsLoaded, setInitialSectionsLoaded] = useState(false);
   const [fullSiteLoaded, setFullSiteLoaded] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [beatPulse, setBeatPulse] = useState(0);
+  const lastBeatRef = useRef(0);
 
   const handleEnter = () => {
     setInitialSectionsLoaded(true);
@@ -33,6 +36,13 @@ export default function Home() {
   const handleFullSiteLoaded = () => {
     setFullSiteLoaded(true);
   };
+
+  const handleBeat = useCallback((intensity: number) => {
+    const now = performance.now();
+    if (intensity < 0.42 || now - lastBeatRef.current < 280) return;
+    lastBeatRef.current = now;
+    setBeatPulse((pulse) => pulse + 1);
+  }, []);
 
   useEffect(() => {
     if (!fullSiteLoaded) return;
@@ -44,10 +54,12 @@ export default function Home() {
   return (
     <>
       <ClientWrapper onEnter={handleEnter} />
+      {initialSectionsLoaded && <FireflyEffect beatPulse={beatPulse} />}
       {initialSectionsLoaded && (
         <MusicPlayer
           autoPlay
           track={authenticated ? "afterAuthentication" : "opening"}
+          onBeat={handleBeat}
         />
       )}
       <Navbar visible={fullSiteLoaded} />
