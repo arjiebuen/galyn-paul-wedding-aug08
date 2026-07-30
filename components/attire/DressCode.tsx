@@ -2,209 +2,181 @@
 
 import { motion } from "framer-motion";
 
-const colorMap: Record<string, string> = {
-  "Golden Brown": "#C8A96A",
-  Taupe: "#A0846B",
-  "Blush Pink": "#DE5D83",
-  "Dusty Peach": "#E6A88A",
-  "Nude Beige": "#F1DEC9",
-  "Bright Pink": "#E75480",
-  "Soft Peach": "#FFDAB9",
-};
+type PaletteColor = { name: string; hex: string };
 
-const sponsorsPalette = ["Golden Brown"];
-const bridesmaidsPalette = ["Golden Brown"];
-const groomsmenPalette = ["Golden Brown"];
-const flowerGirlsPalette = ["Golden Brown"];
-const guestsPalette = ["Golden Brown"];
+const sponsorsPalette: PaletteColor[] = [
+  { name: "Golden Brown", hex: "#B79050" },
+  { name: "Warm Taupe", hex: "#C9A188" },
+  { name: "Blush Pink", hex: "#EEC7CC" },
+  { name: "Dusty Peach", hex: "#EFB3A8" },
+];
 
-function ColorCircles({ colors }: { colors: string[] }) {
+const weddingPartyPalette: PaletteColor[] = [
+  { name: "Nude Beige", hex: "#D2B28D" },
+  { name: "Warm Taupe", hex: "#C9A188" },
+];
+
+const flowerGirlsPalette: PaletteColor[] = [
+  { name: "Rosy Pink", hex: "#EA89D0" },
+  { name: "Soft Peach", hex: "#F4B2A7" },
+];
+
+const guestPalette = sponsorsPalette;
+const fullPalette = [...sponsorsPalette, weddingPartyPalette[0], ...flowerGirlsPalette];
+
+function Palette({ colors }: { colors: PaletteColor[] }) {
   return (
-    <div className="flex justify-center gap-3 sm:gap-4 flex-wrap">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
       {colors.map((color) => (
-        <div key={color} className="flex flex-col items-center gap-1.5">
+        <div key={color.name} className="rounded-2xl border border-[#EDE5DE] bg-[#FFFCF9] p-3 text-center">
           <div
-            className="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-2 border-gray-200 shadow-inner"
-            style={{ background: colorMap[color] }}
+            className="mx-auto mb-2 h-11 w-11 rounded-full border-2 border-white shadow-md sm:h-14 sm:w-14"
+            style={{ backgroundColor: color.hex }}
           />
-          <span className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">
-            {color}
-          </span>
+          <p className="text-xs font-semibold text-[#3A312C]">{color.name}</p>
+          <p className="mt-0.5 text-[10px] tracking-wide text-gray-500">{color.hex}</p>
         </div>
       ))}
     </div>
   );
 }
 
+function AttireList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h4 className="mb-3 text-xs font-semibold uppercase tracking-[2px] text-[#B79050]">{title}</h4>
+      <ul className="space-y-2 text-sm leading-relaxed text-[#514740]">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span className="mt-1 text-[#B79050]">•</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function DressCard({
+  title,
+  attire,
+  palette,
+  children,
+}: {
+  title: string;
+  attire: string;
+  palette: PaletteColor[];
+  children?: React.ReactNode;
+}) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55 }}
+      className="rounded-3xl bg-white p-6 shadow-xl sm:p-10"
+    >
+      <div className="mb-7 text-center">
+        <h3 className="text-lg font-semibold uppercase tracking-[3px] text-[#3A312C] sm:text-xl">{title}</h3>
+        <p className="mt-3 text-xs uppercase tracking-[2px] text-[#B79050]">Attire: {attire}</p>
+      </div>
+      <p className="mb-3 text-xs uppercase tracking-[2px] text-gray-500">Approved Color Palette</p>
+      <Palette colors={palette} />
+      {children && <div className="mt-7 border-t border-[#F0E8E1] pt-7">{children}</div>}
+    </motion.article>
+  );
+}
+
 export default function DressCode() {
   return (
-    <section id="dress-code" className="py-20 sm:py-32 bg-[#FAF7F4]">
-      <div className="container mx-auto px-6 max-w-6xl">
-        {/* Title */}
+    <section id="dress-code" className="bg-[#FAF7F4] py-20 sm:py-32">
+      <div className="container mx-auto max-w-6xl px-6">
         <motion.h2
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="font-heading text-4xl sm:text-6xl text-center mb-4 tracking-[6px] uppercase"
+          className="mb-4 text-center font-heading text-4xl uppercase tracking-[6px] sm:text-6xl"
         >
           Dress Code
         </motion.h2>
-
-        {/* Decorative Divider */}
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="w-24 h-px bg-[#D8C3B5] mx-auto mb-16 sm:mb-20"
+          className="mx-auto mb-8 h-px w-24 bg-[#D8C3B5]"
         />
+        <p className="mx-auto mb-14 max-w-2xl text-center text-sm leading-7 text-[#675D56] sm:text-base">
+          We kindly invite our beloved family and friends to celebrate our special day in semi-formal attire.
+          To create a beautiful and harmonious celebration, we encourage everyone to wear colors inspired by our wedding palette.
+        </p>
 
-        {/* Sponsors */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6 }}
-          className="rounded-3xl bg-white shadow-xl p-6 sm:p-10 text-center mb-10"
-        >
-          <h3 className="text-base sm:text-xl font-semibold uppercase tracking-[3px] text-[#3A312C] mb-6">
-            Principal &amp; Secondary Sponsors
-          </h3>
-
-          <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-[2px] mb-3">
-            Palette
-          </p>
-
-          <ColorCircles colors={sponsorsPalette} />
-
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-[2px] mb-2">
-              Recommended Attire
-            </p>
-
-            <p className="text-sm sm:text-base text-[#3A312C]">
-              Gentlemen: Barong or Suit in any palette color
-            </p>
-
-            <p className="text-sm sm:text-base text-[#3A312C]">
-              Ladies: Long Formal Gown
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Bridesmaids & Groomsmen */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="rounded-3xl bg-white shadow-xl p-6 sm:p-10 mb-10"
-        >
-          <h3 className="text-base sm:text-xl font-semibold uppercase tracking-[3px] text-[#3A312C] text-center mb-8">
-            Bridesmaids &amp; Groomsmen
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div className="text-center">
-              <h4 className="text-sm font-semibold uppercase tracking-[2px] text-[#C8A96A] mb-4">
-                Bridesmaids
-              </h4>
-
-              <ColorCircles colors={bridesmaidsPalette} />
+        <div className="space-y-10">
+          <DressCard title="Principal & Secondary Sponsors" attire="Formal" palette={sponsorsPalette}>
+            <div className="grid gap-8 sm:grid-cols-2">
+              <AttireList title="Gentlemen" items={["Barong Tagalog", "Formal Suit", "Dress Shoes"]} />
+              <AttireList title="Ladies" items={["Long Formal Gown", "Elegant Heels or Dress Sandals"]} />
             </div>
+          </DressCard>
 
-            <div className="text-center">
-              <h4 className="text-sm font-semibold uppercase tracking-[2px] text-[#C8A96A] mb-4">
-                Groomsmen
-              </h4>
+          <DressCard title="Bridesmaids & Groomsmen" attire="Coordinated Wedding Party Attire" palette={weddingPartyPalette} />
 
-              <ColorCircles colors={groomsmenPalette} />
+          <DressCard title="Flower Girls" attire="Dress" palette={flowerGirlsPalette} />
+
+          <DressCard title="Guests" attire="Semi-Formal" palette={guestPalette}>
+            <p className="mb-7 text-center text-sm leading-6 text-[#675D56]">
+              We kindly request our guests to wear attire that complements our wedding color palette.
+            </p>
+            <div className="grid gap-8 sm:grid-cols-2">
+              <AttireList
+                title="Gentlemen"
+                items={["Barong Tagalog", "Long-sleeved Dress Shirt", "Polo with Slacks", "Formal Suit (optional)", "Dress Shoes or Loafers"]}
+              />
+              <AttireList
+                title="Ladies"
+                items={["Cocktail Dress", "Midi Dress", "Maxi Dress", "Semi-Formal Jumpsuit", "Elegant Blouse with Skirt or Trousers", "Heels, Dress Sandals, or Formal Flats"]}
+              />
             </div>
-          </div>
+          </DressCard>
+        </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-center text-sm text-[#3A312C]">
-              White polo with matching tie or bow tie{" "}
-              <span className="text-gray-500">(optional)</span>
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Flower Girls */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="rounded-3xl bg-white shadow-xl p-6 sm:p-10 text-center mb-10"
+          className="mt-10 rounded-3xl border border-[#EBCFC9] bg-[#FFF7F4] p-6 sm:p-10"
         >
-          <h3 className="text-base sm:text-xl font-semibold uppercase tracking-[3px] text-[#3A312C] mb-6">
-            Flower Girls
-          </h3>
-
-          <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-[2px] mb-3">
-            Palette
+          <h3 className="text-center text-lg font-semibold uppercase tracking-[3px] text-[#8C5148] sm:text-xl">Please Avoid</h3>
+          <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-6 text-[#675D56]">
+            To maintain the elegance of our celebration, we kindly ask guests to avoid wearing:
           </p>
-
-          <ColorCircles colors={flowerGirlsPalette} />
-
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-[2px] mb-2">
-              Recommended Attire
-            </p>
-
-            <p className="text-sm sm:text-base text-[#3A312C]">
-              Knee-length or Floor-length Dress
-            </p>
+          <div className="mx-auto mt-6 grid max-w-3xl grid-cols-1 gap-x-10 gap-y-2 sm:grid-cols-2">
+            {["White (#FFFFFF)", "Ivory (#FFFFF0)", "Neon or overly bright colors", "Casual T-shirts", "Ripped Jeans", "Shorts", "Flip-flops or Rubber Slippers", "Athletic Wear"].map((item) => (
+              <p key={item} className="text-sm text-[#514740]"><span className="mr-2 text-[#B79050]">•</span>{item}</p>
+            ))}
           </div>
+          <p className="mt-7 text-center text-sm font-semibold italic text-[#8C5148]">White and Ivory are reserved exclusively for the Bride.</p>
         </motion.div>
 
-        {/* Guests */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="rounded-3xl bg-white shadow-xl p-6 sm:p-10 text-center mb-10"
+          className="mt-10 rounded-3xl bg-white p-6 shadow-xl sm:p-10"
         >
-          <h3 className="text-base sm:text-xl font-semibold uppercase tracking-[3px] text-[#3A312C] mb-3">
-            Guests
-          </h3>
-
-          <p className="text-sm text-[#C8A96A] uppercase tracking-[4px] mb-6">
-            Semi-Formal
-          </p>
-
-          <p className="text-xs sm:text-sm text-gray-500 mb-4">
-            Please wear attire inspired by our wedding color palette.
-          </p>
-
-          <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-[2px] mb-3">
-            Color Palette
-          </p>
-
-          <ColorCircles colors={guestsPalette} />
+          <h3 className="mb-6 text-center text-lg font-semibold uppercase tracking-[3px] text-[#3A312C] sm:text-xl">Wedding Color Palette</h3>
+          <Palette colors={fullPalette} />
         </motion.div>
 
-        {/* Decorative Divider */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="w-24 h-px bg-[#D8C3B5] mx-auto my-12 sm:my-16"
-        />
-
-        {/* White Notice */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.97 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="max-w-lg mx-auto rounded-2xl border-2 border-red-200 bg-red-50/80 px-6 sm:px-10 py-5 sm:py-6 text-center"
+          className="mx-auto mt-12 max-w-2xl text-center"
         >
-          <p className="text-xs sm:text-sm font-semibold uppercase tracking-[4px] text-red-600">
-            ⚠ White is strictly reserved for the Bride.
+          <p className="font-heading text-3xl text-[#3A312C]">Thank You</p>
+          <p className="mt-4 text-sm leading-7 text-[#675D56] sm:text-base">
+            Your presence is the greatest gift we could ask for. Thank you for honoring our dress code and helping create a beautiful, elegant, and memorable celebration. We look forward to celebrating this special day with you! 💕
           </p>
         </motion.div>
       </div>

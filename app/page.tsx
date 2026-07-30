@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ClientWrapper from "@/components/common/ClientWrapper";
 import Navbar from "@/components/common/Navbar";
@@ -34,6 +34,13 @@ export default function Home() {
     setFullSiteLoaded(true);
   };
 
+  useEffect(() => {
+    if (!fullSiteLoaded) return;
+    requestAnimationFrame(() => {
+      document.getElementById("countdown")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [fullSiteLoaded]);
+
   return (
     <>
       <ClientWrapper onEnter={handleEnter} />
@@ -58,11 +65,12 @@ export default function Home() {
           <>
             <AnimatePresence mode="wait">
               <motion.div
+                id="countdown"
                 key="countdown"
-                initial={{ opacity: 0, y: 60, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, x: 80 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{
-                  duration: 1.2,
+                  duration: 1,
                   ease: [0.16, 1, 0.3, 1] as const,
                 }}
               >
