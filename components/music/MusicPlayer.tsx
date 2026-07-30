@@ -34,15 +34,25 @@ export default function MusicPlayer({ autoPlay = false, track }: MusicPlayerProp
     audio.volume = 0.3;
     audioRef.current = audio;
 
-    if (autoPlay) {
-      audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    const startTrack = () => {
+      if (track === "opening") audio.currentTime = 70;
+      if (autoPlay) {
+        audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+      }
+    };
+
+    setIsPlaying(false);
+    if (audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      startTrack();
+    } else {
+      audio.addEventListener("loadedmetadata", startTrack, { once: true });
     }
 
     return () => {
       audio.pause();
       if (audioRef.current === audio) audioRef.current = null;
     };
-  }, [autoPlay, currentTrack.src]);
+  }, [autoPlay, currentTrack.src, track]);
 
   const handleToggle = () => {
     const audio = audioRef.current;
