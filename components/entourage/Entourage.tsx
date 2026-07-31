@@ -52,6 +52,7 @@ const entourage: EntourageGroup[] = [
       "Ms. Cecil Delarmente",
       "Ms. Edna Galang",
       "Mr. Pontestante Padua",
+      "Mr. Ruby Ordinado & Mrs. Remedios Ordinado",
     ],
   },
   {
